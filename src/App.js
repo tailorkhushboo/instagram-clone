@@ -10,7 +10,11 @@ function App() {
     useEffect(() => {
         db.collection('posts').onSnapshot(snapshot => {
             //every time a new post is added , this code fires...
-            setPosts(snapshot.docs.map(doc => doc.data()));
+            setPosts(snapshot.docs.map(doc => ({
+                id: doc.id,
+                post: doc.data()
+            })
+            ));
         } )
     }, []);
 
@@ -24,8 +28,8 @@ function App() {
         </div>
         <h1>Header</h1>
         {
-            posts.map(post => (
-                <Post username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
+            posts.map(({id,post}) => (
+                <Post key={id} username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
             ))
         }
         {/*<Post username="Khushboo" caption="One click import demo content which includes post, pages, comments etc. " imageUrl={react_logo}/>*/}
