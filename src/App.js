@@ -1,22 +1,19 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Post from "./Post";
 import react_logo from './react-logo.jpg';
-
+import { db } from './firebase'
 function App() {
-    const [posts, setPosts] = useState([
-        {
-            username: "Khushboo",
-            caption: "One click import demo content which includes post, pages, comments etc.",
-            imageUrl: "https://www.gstatic.com/webp/gallery3/4_webp_ll.png"
-        },
-        {
-            username: "Neel",
-            caption: "import demo content for different",
-            imageUrl: "https://www.gstatic.com/webp/gallery3/2.png"
-        }
-    ]);
+    const [posts, setPosts] = useState([]);
+
+    useEffect(() => {
+        db.collection('posts').onSnapshot(snapshot => {
+            //every time a new post is added , this code fires...
+            setPosts(snapshot.docs.map(doc => doc.data()));
+        } )
+    }, []);
+
   return (
     <div className="app">
         <div className="app__header">
